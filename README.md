@@ -36,11 +36,17 @@ This script classifies emergency vehicle sounds (ambulance vs. firetruck) using 
 1. **Reads training data** from ambulance and firetruck folders.
 2. **Analyzes frequency content** and applies three pre-defined **bandpass filters** designed to isolate different frequency bands.
 3. **Extracts features** by computing:
-   - **Energy in each filtered signal**, and
+   - **Energy in each filtered signal**, and  
    - **Energy ratios** between bands (e.g., Filter 1 energy / Filter 2 energy).
 4. **Trains a simple k-NN classifier** (`k=3`) using these energy ratio features.
 5. **Classifies test files** using the same feature pipeline and k-NN logic.
 6. **Calculates classification accuracy** and saves results to a CSV file.
+
+### 📊 Plots included:
+- **Frequency spectra** of sample ambulance and firetruck signals to observe dominant frequency regions.
+- **Filter response plots** showing gain vs. frequency curves for each bandpass filter.
+- **Feature scatter plot** of training samples illustrating class separation in the energy ratio feature space.
+- **Filtered signal comparison** to visually inspect how each filter affects the raw audio signal.
 
 ### 📈 Use Case:
 - Real-time classification of emergency vehicle sirens.
