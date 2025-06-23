@@ -1,67 +1,84 @@
 # wav-classifier-mfcc-fft
 
-This project implements two MATLAB scripts for classifying `.wav` audio files using digital signal processing and feature extraction techniques. It covers two parts:
+This project implements a MATLAB-based audio classification system using signal processing and feature extraction techniques. It includes two main parts:
 
 ---
 
-## ✅ Part 1: Audio Classification Using MFCC/FFT
-## 🎧 `classify.m` – MFCC/FFT-Based Audio Classifier
+## ✅ Part 1: Audio Classification Using MFCC
+### 🎧 `classify_audio.m` – MFCC-Based Audio Classifier
 
-This script performs classification of audio files from three folders: `class_1`, `class_2`, and `unknown`.
+This script classifies audio files from three folders: `class_1`, `class_2`, and `unknown`.
 
 ### 🔍 What it does:
-1. **Reads audio files** from the training folders (`class_1`, `class_2`) and unknown files.
-2. **Extracts features** from each file using:
-   - **MFCC** (Mel Frequency Cepstral Coefficients) or  
-   - **FFT-based spectral features** (depending on your implementation).
-3. **Computes similarity** between feature vectors using a selected distance metric:
-   - Euclidean Distance
-   - Cosine Similarity
-   - Manhattan Distance
-4. **Classifies unknown audio files** by comparing them with known class samples and assigning the closest match.
-5. **Prints classification results**, showing the predicted class for each file.
+1. **Reads audio files** from `class_1`, `class_2`, and `unknown`.
+2. **Extracts MFCC features** using `extract_mfcc_fixed.m`.
+3. **Computes average Euclidean distance** between the unknown sample and each class's training features.
+4. **Assigns each unknown file** to the class with the smallest average distance.
+5. **Prints and saves results** to `part1_results.csv` using `cell2csv.m`.
+
+### 📁 Supporting Files:
+- `extract_mfcc_fixed.m`: Computes 13 fixed-size MFCC features per file.
+- `cell2csv.m`: Converts classification results to a CSV format.
 
 ### 📈 Use Case:
-- General-purpose sound classification based on statistical signal features.
-- Designed to work without needing pre-labeled test data.
+- General-purpose sound classification using perceptually relevant MFCC features.
+- Suitable for distinguishing between classes where spectral patterns differ.
 
 ---
 
 ## ✅ Part 2: Filter-Based Audio Classification
-## 🚨 `filterDesign.m` – Filter-Based Emergency Sound Classifier
+### 🚨 `filterDesign.m` – Filter-Based Emergency Sound Classifier
 
-This script classifies emergency vehicle sounds (ambulance vs. firetruck) using bandpass filtering and energy ratio features.
+This script classifies emergency vehicle audio (ambulance vs. firetruck) using filter-based energy features and k-NN classification.
 
 ### 🔍 What it does:
-1. **Reads training data** from ambulance and firetruck folders.
-2. **Analyzes frequency content** and applies three pre-defined **bandpass filters** designed to isolate different frequency bands.
-3. **Extracts features** by computing:
-   - **Energy in each filtered signal**, and  
-   - **Energy ratios** between bands (e.g., Filter 1 energy / Filter 2 energy).
-4. **Trains a simple k-NN classifier** (`k=3`) using these energy ratio features.
-5. **Classifies test files** using the same feature pipeline and k-NN logic.
-6. **Calculates classification accuracy** and saves results to a CSV file.
+1. **Reads training data** from `train/ambulance` and `train/firetruck`.
+2. **Analyzes frequency content** using FFT to identify class-specific frequency bands.
+3. **Applies 3 bandpass filters**:
+   - bp1: 600–1100 Hz (ambulance)
+   - bp2: 1300–1800 Hz (firetruck)
+   - bp3: 2100–2800 Hz (firetruck)
+4. **Extracts features** by calculating:
+   - **Energy in each filtered signal**
+   - **Energy ratios**: E1/E2 and E1/E3
+5. **Trains a k-NN classifier** (`k=3`) using energy ratio features.
+6. **Tests the model** on unseen data and outputs predictions.
+7. **Saves results** to `classification_results_part2_unique.csv`.
 
 ### 📊 Plots included:
-- **Frequency spectra** of sample ambulance and firetruck signals to observe dominant frequency regions.
-- **Filter response plots** showing gain vs. frequency curves for each bandpass filter.
-- **Feature scatter plot** of training samples illustrating class separation in the energy ratio feature space.
-- **Filtered signal comparison** to visually inspect how each filter affects the raw audio signal.
+- **Frequency spectra** of ambulance and firetruck signals
+- **Bandpass filter responses**
+- **Feature scatter plot** showing class separation
+- **Filtered signal output** for visual inspection of each band
 
 ### 📈 Use Case:
-- Real-time classification of emergency vehicle sirens.
-- Works well where spectral band separation is effective (e.g., ambulance vs. firetruck tones).
+- Designed to recognize emergency vehicle sirens in real time.
+- Effective in scenarios with spectral separation between classes.
 
 ---
 
-## 🧠 Summary
+## 🧠 Summary of Key Files
 
-| File              | Purpose                                                      |
-|-------------------|--------------------------------------------------------------|
-| `part1_classify.m`| Feature-based audio classifier using MFCC/FFT + distance     |
-| `filterDesign.m`  | DSP-based classifier using filtered energy ratios and k-NN   |
-
-Both scripts are fully implemented in MATLAB and intended for audio classification tasks in signal processing coursework or research.
+| File Name             | Description                                                                 |
+|-----------------------|-----------------------------------------------------------------------------|
+| `classify_audio.m`    | MFCC-based classifier for `unknown/` audio using distance metrics           |
+| `extract_mfcc_fixed.m`| Extracts 13 MFCC features with padding/trimming for fixed length            |
+| `cell2csv.m`          | Writes classification results to `part1_results.csv`                        |
+| `filterDesign.m`      | Filter-based DSP classifier using energy ratios and k-NN                    |
 
 ---
 
+## 💻 Tools & Requirements
+
+- MATLAB R2021 or later
+- Audio Toolbox (for MFCC feature extraction)
+- Signal Processing Toolbox (for filter design and FFT analysis)
+
+---
+
+## 📦 Output Files
+
+- `part1_results.csv`: Predictions for unknown audio samples (Part 1)
+- `classification_results_part2_unique.csv`: Results for test audio (Part 2)
+
+---
