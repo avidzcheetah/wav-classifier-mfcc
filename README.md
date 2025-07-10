@@ -1,4 +1,4 @@
-# wav-classifier-mfcc-fft
+# wav-classifier-mfcc
 
 This project implements a MATLAB-based audio classification system using signal processing and feature extraction techniques. It includes two main parts:
 
